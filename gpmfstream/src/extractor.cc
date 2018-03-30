@@ -23,16 +23,13 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
   uint32_t *payload = nullptr; //buffer to store GPMF samples from the MP4.
 
   metadatalength = OpenGPMFSource(path.c_str());
-  std::cout << "metadatalength: " << metadatalength << std::endl;
 
   if (metadatalength <= 0.f) {
-    std::cerr << "Failed to open source" << std::endl;
-    return nullptr;
+    throw std::invalid_argument("Failed to open GPMF source");
   }
 
   uint32_t index, payloads;
   payloads = GetNumberGPMFPayloads();
-  std::cout << path << " contains " << metadatalength << " seconds of metadata from " << payloads << " payloads " << std::endl;
 
   auto extractor = std::make_shared<GpmfExtractor>();
   for (index = 0; index < payloads; index++) {
