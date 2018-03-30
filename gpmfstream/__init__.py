@@ -28,7 +28,10 @@ class Stream:
         self._units = None
 
     def __repr__(self):
-        return f"<Stream of {self.name}>"
+        if self.name:
+            return f"<Stream {self.key} '{self.name}'>"
+        else:
+            return f"<Stream {self.key}>"
 
     @classmethod
     def extract_streams(cls, path):
@@ -42,8 +45,13 @@ class Stream:
         }
 
     @property
+    def key(self):
+        "Stream key (FOURCC)"
+        return self._stream.key
+
+    @property
     def name(self):
-        "Stream name (FOURCC)"
+        "Stream name"
         return self._stream.name
 
     @property

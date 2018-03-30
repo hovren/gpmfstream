@@ -25,7 +25,8 @@ struct StreamData {
 };
 
 struct Stream {
-  Stream(const std::string name) : name(name) {};
+  Stream(const std::string key) : key(key) {};
+  std::string key;
   std::string name;
   std::vector<StreamData> stream_data;
   std::vector<std::string> units;

@@ -13,6 +13,7 @@ namespace py = pybind11;
 void declare_stream(py::module& m) {
   using Class = Stream;
   auto cls = py::class_<Class, std::shared_ptr<Class>>(m, "Stream");
+  cls.def_readonly("key", &Class::key);
   cls.def_readonly("name", &Class::name);
   cls.def_readonly("stream_data", &Class::stream_data);
   cls.def_property_readonly("units", [](Class &self){

@@ -60,12 +60,12 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
         sd.elements = GPMF_ElementsInStruct(ms);
         sd.samples = GPMF_PayloadSampleCount(ms);
 
-        auto name = Key2String(key);
+        auto key_string = Key2String(key);
 
-        auto stream = extractor->streams[name];
+        auto stream = extractor->streams[key_string];
         if(stream == nullptr) {
-          stream = std::make_shared<Stream>(name);
-          extractor->streams[name] = stream;
+          stream = std::make_shared<Stream>(key_string);
+          extractor->streams[key_string] = stream;
         }
 
         if (sd.samples) {
@@ -76,6 +76,7 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
           stream->stream_data.push_back(sd);
 
           // Extract units?
+          // FIXME: If no units found we should probably not continue looking
           if (stream->units.size() == 0) {
             //Search for any units to display
             GPMF_stream find_stream;
@@ -94,6 +95,20 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
               }
             }
           } // extract units
+
+          // Extract name?
+          // FIXME: If no units found we should probably not continue looking
+          if (stream->name.empty()) {
+            //Search for any units to display
+            GPMF_stream find_stream;
+            GPMF_CopyState(ms, &find_stream);
+            if (GPMF_OK == GPMF_FindPrev(&find_stream, GPMF_KEY_STREAM_NAME, GPMF_CURRENT_LEVEL)) {
+              char *data = (char *)GPMF_RawData(&find_stream);
+              uint32_t nchars = GPMF_Repeat(&find_stream);
+              std::string name_string(data, nchars);
+              stream->name = name_string;
+            }
+          } // extract name
 
         }
 
