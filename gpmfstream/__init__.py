@@ -13,6 +13,7 @@ class Stream:
         gyro = streams['GYRO']
         plt.plot(gyro.timestamps, gyro.data)
 
+    Extracting streams is not thread safe!
     """
 
     def __init__(self, stream):
