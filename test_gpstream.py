@@ -6,7 +6,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import gpmfstream
+import _gpmfstream as gpmfstream
 
 path = Path("/home/hannes/Code/gpmfstream/deps/gpmf-parser/samples/hero6.mp4")
 print(path, path.exists())
