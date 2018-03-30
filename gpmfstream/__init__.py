@@ -3,14 +3,37 @@ from ._gpmfstream import extract_streams
 import numpy as np
 
 class Stream:
+    """GPMF Stream
+
+    Represents a GPMF stream loaded from e.g. a MP4 file.
+    Handles extraction of timestamps.
+
+    Example:
+        streams = Stream.extract_streams(path)
+        gyro = streams['GYRO']
+        plt.plot(gyro.timestamps, gyro.data)
+
+    """
+
     def __init__(self, stream):
+        """Create a new stream by wrapping a raw stream
+
+        Use the extract_streams method to extract streams.
+        """
         self._stream = stream
         self._data = None
         self._timestamps = None
         self.rate = None
 
+    def __repr__(self):
+        return f"<Stream of {self.name}>"
+
     @classmethod
-    def extract_from(cls, path):
+    def extract_streams(cls, path):
+        """Extract streams from a GPMF source file
+
+        Returns a map of streams, by name/fourcc.
+        """
         return {
             fourcc: cls(stream)
             for fourcc, stream in extract_streams(str(path)).items()
@@ -18,16 +41,19 @@ class Stream:
 
     @property
     def name(self):
+        "Stream name (FOURCC)"
         return self._stream.name
 
     @property
     def data(self):
+        "Data sample array of shape (nsamples, ndim)"
         if self._data is None:
             self._assemble_data()
         return self._data
 
     @property
     def timestamps(self):
+        "Sample timestamps"
         if self._timestamps is None:
             self._compute_timestamps()
         return self._timestamps
