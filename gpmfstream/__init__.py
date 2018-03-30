@@ -24,6 +24,7 @@ class Stream:
         self._data = None
         self._timestamps = None
         self.rate = None
+        self._units = None
 
     def __repr__(self):
         return f"<Stream of {self.name}>"
@@ -45,6 +46,18 @@ class Stream:
         return self._stream.name
 
     @property
+    def units(self):
+        """Sample units
+
+        If all sample elements share the same unit, return a single string.
+        Otherwise, return a tuple of strings, one per element.
+        If units are missing for the stream, return None.
+        """
+        if self._units is None:
+            self._format_units()
+        return self._units
+
+    @property
     def data(self):
         "Data sample array of shape (nsamples, ndim)"
         if self._data is None:
@@ -57,6 +70,29 @@ class Stream:
         if self._timestamps is None:
             self._compute_timestamps()
         return self._timestamps
+
+    def _format_units(self):
+        mapping = {
+            b'\xb0': b'\xc2\xb0',  # degree
+            b'\xb2': b'\xc2\xb2',  # square
+            b'\xb3': b'\xc2\xb3',  # cube
+            b'\xb5': b'\xc2\xb5',  # micro (mu)
+            b'\x00\x00': b'',      # zero
+        }
+
+        def cleanup(bs):
+            for prev, new in mapping.items():
+                bs = bs.replace(prev, new)
+            return bs.decode('utf8')
+
+        unit_list = [cleanup(unit) for unit in self._stream.units]
+
+        if not unit_list:
+            self._units = None
+        elif len(unit_list) > 1:
+            self._units = tuple(unit_list)
+        else:
+            self._units = unit_list[0]
 
     def _assemble_data(self):
         self._data = np.vstack([sd for sd in self._stream.stream_data])

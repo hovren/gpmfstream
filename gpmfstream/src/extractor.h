@@ -28,6 +28,7 @@ struct Stream {
   Stream(const std::string name) : name(name) {};
   std::string name;
   std::vector<StreamData> stream_data;
+  std::vector<std::string> units;
 };
 
 struct GpmfExtractor {

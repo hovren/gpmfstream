@@ -15,6 +15,15 @@ void declare_stream(py::module& m) {
   auto cls = py::class_<Class, std::shared_ptr<Class>>(m, "Stream");
   cls.def_readonly("name", &Class::name);
   cls.def_readonly("stream_data", &Class::stream_data);
+  cls.def_property_readonly("units", [](Class &self){
+    std::vector<py::bytes> bytes_vector;
+
+    for (auto& s : self.units) {
+      bytes_vector.push_back(py::bytes(s));
+    }
+
+    return bytes_vector;
+  });
 }
 
 void declare_streamdata(py::module& m) {

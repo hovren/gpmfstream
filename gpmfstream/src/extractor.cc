@@ -54,7 +54,6 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
     while (GPMF_OK == GPMF_FindNext(ms, GPMF_KEY_STREAM, GPMF_RECURSE_LEVELS)) {
       if (GPMF_OK == GPMF_SeekToSamples(ms)) { //find the last FOURCC within the stream
         uint32_t key = GPMF_Key(ms);
-        //GPMF_SampleType type = GPMF_Type(ms);
         StreamData sd;
         sd.payload = p;
 
@@ -75,6 +74,27 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
 
           GPMF_ScaledData(ms, sd.buffer, sd.buffer_size, 0, sd.samples, GPMF_TYPE_DOUBLE);
           stream->stream_data.push_back(sd);
+
+          // Extract units?
+          if (stream->units.size() == 0) {
+            //Search for any units to display
+            GPMF_stream find_stream;
+            GPMF_CopyState(ms, &find_stream);
+            if (GPMF_OK == GPMF_FindPrev(&find_stream, GPMF_KEY_SI_UNITS, GPMF_CURRENT_LEVEL) ||
+                GPMF_OK == GPMF_FindPrev(&find_stream, GPMF_KEY_UNITS, GPMF_CURRENT_LEVEL))
+            {
+              char *data = (char *)GPMF_RawData(&find_stream);
+              int ssize = GPMF_StructSize(&find_stream);
+              uint32_t unit_samples = GPMF_Repeat(&find_stream);
+
+              for (int i = 0; i < unit_samples; i++) {
+                std::string unit_string(data, ssize);
+                stream->units.push_back(unit_string);
+                data += ssize;
+              }
+            }
+          } // extract units
+
         }
 
         //extractor.streams[]
