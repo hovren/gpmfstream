@@ -9,4 +9,4 @@ include_directories(deps/gpmf-parser/ deps/gpmf-parser/demo)
 
 # Build python module
 add_subdirectory(deps/pybind11)
-pybind11_add_module(gpmfstream src/py_gpstream.cc src/extractor.cc ${GPMF_SORUCES})
+pybind11_add_module(gpmfstream src/py_gpstream.cc src/extractor.cc ${GPMF_SOURCES})

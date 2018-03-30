@@ -67,8 +67,8 @@ void declare_payload(py::module& m) {
   });
 }
 
-std::map<std::string, std::shared_ptr<Stream>> wrap_extract(const std::string path) {
-  auto extractor = ExtractStreams(path);
+std::map<std::string, std::shared_ptr<Stream>> extract_streams(const std::string path) {
+  auto extractor = ExtractGpmf(path);
   if(extractor == nullptr) {
     throw py::value_error("Failed to extrac streams");
   }
@@ -84,5 +84,5 @@ m.doc() = "GPMF (GoPro(/General Purpose) Metadata Format stream library";
   declare_payload(m);
 
   //m.def("extract_streams", &ExtractStreams);
-  m.def("extract_streams", &wrap_extract);
+  m.def("extract_streams", &extract_streams);
 }

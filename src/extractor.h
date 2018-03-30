@@ -35,6 +35,6 @@ struct GpmfExtractor {
   std::map<std::string, std::shared_ptr<Stream>> streams;
 };
 
-std::shared_ptr<GpmfExtractor> ExtractStreams(const std::string& path);
+std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path);
 
 #endif //GOPRO_IMU_EXTRACT_EXTRACTOR_H

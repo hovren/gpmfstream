@@ -16,7 +16,7 @@ std::string Key2String(uint32_t key) {
   return fourcc;
 }
 
-std::shared_ptr<GpmfExtractor> ExtractStreams(const std::string& path) {
+std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
   int32_t ret = GPMF_OK;
   GPMF_stream metadata_stream, *ms = &metadata_stream;
   double metadatalength;

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 import gpmfstream
 
-path = Path("/home/hannes/Code/gpmfstream/gpmf-parser/samples/hero6.mp4")
+path = Path("/home/hannes/Code/gpmfstream/deps/gpmf-parser/samples/hero6.mp4")
 print(path, path.exists())
 streams = gpmfstream.extract_streams(str(path))
 
