@@ -77,6 +77,7 @@ std::map<std::string, std::shared_ptr<Stream>> extract_streams(const std::string
 };
 
 PYBIND11_MODULE(_gpmfstream, m) {
+
 m.doc() = "GPMF (GoPro(/General Purpose) Metadata Format stream library";
 
   declare_stream(m);

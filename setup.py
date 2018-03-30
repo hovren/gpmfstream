@@ -1,4 +1,4 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
@@ -22,8 +22,9 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        '_gpmfstream',
-        ['src/extractor.cc',
+        'gpmfstream._gpmfstream',
+        ['gpmfstream/src/py_gpstream.cc',
+         'gpmfstream/src/extractor.cc',
          'deps/gpmf-parser/GPMF_parser.c',
          'deps/gpmf-parser/demo/GPMF_mp4reader.c'],
         include_dirs=[
@@ -101,6 +102,7 @@ setup(
     #url='https://github.com/pybind/python_example',
     description='Extract GPMF metadata from GoPro MP4 videos',
     long_description='',
+    packages=find_packages(),
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.2'],
     cmdclass={'build_ext': BuildExt},
