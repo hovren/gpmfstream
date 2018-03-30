@@ -6,11 +6,11 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import pygpstream
+import gpmfstream
 
-path = Path("/home/hannes/Code/gopro-imu-extract/gpmf-parser/samples/hero6.mp4")
+path = Path("/home/hannes/Code/gpmfstream/gpmf-parser/samples/hero6.mp4")
 print(path, path.exists())
-streams = pygpstream.extract_streams(str(path))
+streams = gpmfstream.extract_streams(str(path))
 
 for key, stream in streams.items():
     print(key, stream)

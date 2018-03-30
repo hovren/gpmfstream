@@ -76,8 +76,8 @@ std::map<std::string, std::shared_ptr<Stream>> wrap_extract(const std::string pa
   return extractor->streams;
 };
 
-PYBIND11_MODULE(pygpstream, m) {
-m.doc() = "pybind11 example plugin"; // optional module docstring
+PYBIND11_MODULE(gpmfstream, m) {
+m.doc() = "GPMF (GoPro(/General Purpose) Metadata Format stream library";
 
   declare_stream(m);
   declare_streamdata(m);

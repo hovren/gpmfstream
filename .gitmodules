@@ -2,5 +2,8 @@
 	path = gpmf-parser
 	url = https://github.com/gopro/gpmf-parser
 [submodule "pybind11"]
-	path = pybind11
+	path = deps/pybind11
 	url = https://github.com/pybind/pybind11
+[submodule "deps/gpmf-parser"]
+	path = deps/gpmf-parser
+	url = https://github.com/gopro/gpmf-parser
