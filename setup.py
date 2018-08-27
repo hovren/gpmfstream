@@ -3,7 +3,7 @@ from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
 
-__version__ = '0.0.1'
+__version__ = '0.5'
 
 
 class get_pybind_include(object):
@@ -94,14 +94,17 @@ class BuildExt(build_ext):
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
 
+with open('README.md') as f:
+    long_description = f.read()
+
 setup(
     name='gpmfstream',
     version=__version__,
     author='Hannes Ovrén',
     author_email='hannes.ovren@liu.se',
-    #url='https://github.com/pybind/python_example',
+    url='https://github.com/hovren/gpmfstream',
     description='Extract GPMF metadata from GoPro MP4 videos',
-    long_description='',
+    long_description=long_description,
     packages=find_packages(),
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.2'],
