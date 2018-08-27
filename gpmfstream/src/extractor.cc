@@ -34,19 +34,19 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
   double metadatalength;
   uint32_t *payload = nullptr; //buffer to store GPMF samples from the MP4.
 
-  metadatalength = OpenGPMFSource(path.c_str());
+  metadatalength = OpenMP4Source(const_cast<char*>(path.c_str()), MOV_GPMF_TRAK_TYPE, MOV_GPMF_TRAK_SUBTYPE);
 
   if (metadatalength <= 0.f) {
     throw std::invalid_argument("Failed to open GPMF source");
   }
 
   uint32_t index, payloads;
-  payloads = GetNumberGPMFPayloads();
+  payloads = GetNumberPayloads(metadatalength);
 
   auto extractor = std::make_shared<GpmfExtractor>();
   for (index = 0; index < payloads; index++) {
-    uint32_t payloadsize = GetGPMFPayloadSize(index);
-    payload = GetGPMFPayload(payload, index);
+    uint32_t payloadsize = GetPayloadSize(metadatalength, index);
+    payload = GetPayload(metadatalength, payload, index);
 
     if (payload == nullptr)
       throw std::runtime_error("Payload is null");
@@ -54,7 +54,7 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
     auto p = std::make_shared<Payload>();
     p->index = index;
 
-    ret = GetGPMFPayloadTime(index, &p->start, &p->end);
+    ret = GetPayloadTime(metadatalength, index, &p->start, &p->end);
     if (ret != GPMF_OK)
       throw std::runtime_error("Could not get payload times");
 

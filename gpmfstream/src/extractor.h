@@ -23,8 +23,8 @@
 
 struct Payload {
   size_t index;
-  double start;
-  double end;
+  float start;
+  float end;
 };
 
 struct StreamData {
