@@ -66,11 +66,11 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
     while (GPMF_OK == GPMF_FindNext(ms, GPMF_KEY_STREAM, GPMF_RECURSE_LEVELS)) {
       if (GPMF_OK == GPMF_SeekToSamples(ms)) { //find the last FOURCC within the stream
         uint32_t key = GPMF_Key(ms);
-        StreamData sd;
-        sd.payload = p;
+        auto sd = std::make_shared<StreamData>();
+        sd->payload = p;
 
-        sd.elements = GPMF_ElementsInStruct(ms);
-        sd.samples = GPMF_PayloadSampleCount(ms);
+        sd->elements = GPMF_ElementsInStruct(ms);
+        sd->samples = GPMF_PayloadSampleCount(ms);
 
         auto key_string = Key2String(key);
 
@@ -80,11 +80,11 @@ std::shared_ptr<GpmfExtractor> ExtractGpmf(const std::string& path) {
           extractor->streams[key_string] = stream;
         }
 
-        if (sd.samples) {
-          sd.buffer_size = sd.samples * sd.elements * sizeof(double);
-          sd.buffer = new double[sd.buffer_size];
+        if (sd->samples) {
+          sd->buffer_size = sd->samples * sd->elements * sizeof(double);
+          sd->buffer = new double[sd->buffer_size];
 
-          GPMF_ScaledData(ms, sd.buffer, sd.buffer_size, 0, sd.samples, GPMF_TYPE_DOUBLE);
+          GPMF_ScaledData(ms, sd->buffer, sd->buffer_size, 0, sd->samples, GPMF_TYPE_DOUBLE);
           stream->stream_data.push_back(sd);
 
           // Extract units?
