@@ -17,7 +17,7 @@ Currently, we assume a fixed sample rate, and compute it by
 simple linear interpolation.
 
 ## License
-This software is released under the GNU GPL version 3 and later.
+This software is released under the MIT license.
 
 ## Dependencies
 The code depends on https://github.com/gopro/gpmf-parser.
